@@ -1,0 +1,40 @@
+{
+	"schemaVersion": 1,
+	"id": "sinfo",
+	"version": "${version}",
+	"name": "SInfo",
+	"description": "A server-side API mod for GG Server Management.",
+	"authors": [
+		"lycrex"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/ChisatoNishikigi73/sinfo.git"
+	},
+	"license": "MIT",
+	"icon": "assets/sinfo/icon.png",
+	"environment": "server",
+	"entrypoints": {
+		"main": [
+			"lycrex.sinfo.SInfoMod"
+		]
+	},
+	"mixins": [
+		"sinfo.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.14.22",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"custom": {
+		"modmenu": {
+			"badges": ["library"],
+			"parent": {
+				"id": "fabric-api",
+				"name": "Fabric API"
+			}
+		}
+	}
+}
