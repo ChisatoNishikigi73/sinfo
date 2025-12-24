@@ -29,6 +29,8 @@ public class ServerInfoHandler implements HttpHandler {
             String dataJson = JsonUtils.builder()
                     .add("version", net.minecraft.SharedConstants.getGameVersion().getName())
                     .add("motd", server.getServerMotd())
+                    .add("seed", server.getOverworld().getSeed())
+                    .add("difficulty", server.getSaveProperties().getDifficulty().getName().toLowerCase())
                     .add("players", JsonUtils.builder()
                             .add("online", server.getCurrentPlayerCount())
                             .add("max", server.getMaxPlayerCount())
