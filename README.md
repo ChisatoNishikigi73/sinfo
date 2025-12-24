@@ -12,3 +12,7 @@ SInfo is a server-side Fabric mod providing an HTTP API for Minecraft server man
 ## Configuration
 
 Port and authentication settings are located in `config/sinfo.json`.
+
+## APIs
+
+Api docs see [Here](https://7zykje5570.apifox.cn)
