@@ -3,7 +3,7 @@
 	"id": "sinfo",
 	"version": "${version}",
 	"name": "SInfo",
-	"description": "A server-side API mod for GG Server Management.",
+	"description": "SInfo is a server-side Fabric mod providing an HTTP API for Minecraft server management. It facilitates remote monitoring and control through a structured interface.",
 	"authors": [
 		"lycrex"
 	],
