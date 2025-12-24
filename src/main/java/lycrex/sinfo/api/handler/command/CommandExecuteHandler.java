@@ -7,6 +7,7 @@ import com.sun.net.httpserver.HttpHandler;
 import lycrex.sinfo.SInfoMod;
 import lycrex.sinfo.api.ApiServer;
 import lycrex.sinfo.utils.JsonUtils;
+import lycrex.sinfo.utils.Platform;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
@@ -46,9 +47,7 @@ public class CommandExecuteHandler implements HttpHandler {
             final List<String> feedback = new ArrayList<>();
             
             // Create a custom command source to capture feedback
-            ServerCommandSource source = server.getCommandSource()
-                .withReturnValueConsumer((value) -> {})
-                .withOutput(new net.minecraft.server.command.CommandOutput() {
+            ServerCommandSource source = Platform.getSourceWithOutput(server.getCommandSource(), new net.minecraft.server.command.CommandOutput() {
                     @Override
                     public void sendMessage(Text message) {
                         feedback.add(message.getString());

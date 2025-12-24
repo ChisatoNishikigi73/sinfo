@@ -5,7 +5,7 @@ import net.minecraft.advancement.Advancement;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 /**
- * Minecraft Version: 1.20.1
+ * Minecraft Version: 1.19.3
  */
 public class AdvancementHandler {
 
