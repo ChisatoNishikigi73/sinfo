@@ -15,4 +15,4 @@ Port and authentication settings are located in `config/sinfo.json`.
 
 ## APIs
 
-Api docs see [Here](https://7zykje5570.apifox.cn)
+Api docs see [Here](docs/index.html)

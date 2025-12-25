@@ -1,0 +1,348 @@
+{
+  "baseUrl": "hostname:port/api",
+  "title": "SInfo APIs",
+  "introduction": {
+    "description": "SInfo provides APIs for interacting with Minecraft servers. This APIs allows you to manage players, worlds, send messages, execute commands, and monitor server status in real-time.",
+    "features": [
+      "Player information retrieval",
+      "In-game messaging system (chat, actionbar, title)",
+      "Remote command execution",
+      "Server monitoring and statistics",
+      "Real-time event streaming (SSE)",
+      "Resource management (item icons)"
+    ]
+  },
+  "authentication": {
+    "description": "Most endpoints require Bearer token authentication. Include the password hash in the Authorization header:",
+    "header": "Authorization: Bearer <password_hash>",
+    "note": "The default password is admin. Make sure to change it in the mod configuration file. Use the hashed version for the Authorization header."
+  },
+  "responseFormat": [
+    {
+      "type": "Success Response",
+      "example": {
+        "status": "success",
+        "data": {}
+      }
+    },
+    {
+      "type": "Error Response",
+      "example": {
+        "status": "error",
+        "message": "Error description"
+      }
+    },
+    {
+      "type": "Fail Response",
+      "example": {
+        "status": "fail",
+        "message": "Failure reason"
+      }
+    }
+  ],
+  "categories": [
+    {
+      "name": "Player Management",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/player/list",
+          "requiresAuth": true,
+          "description": "Retrieve a list of players on the server (online, offline, or all).",
+          "queryParams": [
+            {
+              "name": "type",
+              "type": "string",
+              "required": false,
+              "description": "Filter type: online (default), offline, or all"
+            }
+          ],
+          "responseExample": {
+            "count": 2,
+            "players": [
+              {
+                "name": "Player1",
+                "uuid": "uuid-string",
+                "isOnline": true,
+                "health": 20.0,
+                "maxHealth": 20.0,
+                "level": 10
+              }
+            ]
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/player/info",
+          "requiresAuth": true,
+          "description": "Get detailed information about a specific player (online or offline).",
+          "queryParams": [
+            {
+              "name": "name",
+              "type": "string",
+              "required": false,
+              "description": "Player name"
+            },
+            {
+              "name": "uuid",
+              "type": "string",
+              "required": false,
+              "description": "Player UUID"
+            }
+          ],
+          "note": "Provide either name or uuid parameter.",
+          "responseExample": {
+            "name": "Player1",
+            "uuid": "uuid-string",
+            "isOnline": true,
+            "health": 20.0,
+            "maxHealth": 20.0,
+            "foodLevel": 20,
+            "level": 10,
+            "xp": 0.5,
+            "gamemode": "survival",
+            "dimension": "minecraft:overworld",
+            "pos": { "x": 100.5, "y": 64.0, "z": 200.3 },
+            "inventory": "...",
+            "mainHand": "...",
+            "offHand": "..."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Messaging",
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/message/send",
+          "requiresAuth": true,
+          "description": "Send messages to players in different formats (chat, actionbar, or title).",
+          "bodyParams": [
+            {
+              "name": "target",
+              "type": "string",
+              "required": false,
+              "description": "all (default), player UUID, or player name"
+            },
+            {
+              "name": "type",
+              "type": "string",
+              "required": false,
+              "description": "chat (default), actionbar, or title"
+            },
+            {
+              "name": "message",
+              "type": "string",
+              "required": true,
+              "description": "Message text or JSON text component"
+            },
+            {
+              "name": "subtitle",
+              "type": "string",
+              "required": false,
+              "description": "Subtitle text (title type only)"
+            },
+            {
+              "name": "fadeIn",
+              "type": "integer",
+              "required": false,
+              "description": "Fade in ticks (default: 10, title only)"
+            },
+            {
+              "name": "stay",
+              "type": "integer",
+              "required": false,
+              "description": "Stay ticks (default: 70, title only)"
+            },
+            {
+              "name": "fadeOut",
+              "type": "integer",
+              "required": false,
+              "description": "Fade out ticks (default: 20, title only)"
+            }
+          ],
+          "requestExample": {
+            "target": "Player1",
+            "type": "title",
+            "message": "Welcome!",
+            "subtitle": "To the server",
+            "fadeIn": 10,
+            "stay": 70,
+            "fadeOut": 20
+          },
+          "responseExample": {
+            "sent": 1
+          }
+        }
+      ]
+    },
+    {
+      "name": "Command Execution",
+      "endpoints": [
+        {
+          "method": "POST",
+          "path": "/command/execute",
+          "requiresAuth": true,
+          "description": "Execute Minecraft server commands remotely.",
+          "bodyParams": [
+            {
+              "name": "command",
+              "type": "string",
+              "required": true,
+              "description": "Command to execute (leading / is optional)"
+            }
+          ],
+          "warning": "This endpoint executes commands with server-level permissions. Use with caution.",
+          "requestExample": {
+            "command": "say Hello from API!"
+          },
+          "responseExample": {
+            "command": "say Hello from API!",
+            "feedback": "[Server] Hello from API!"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Server Information",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/server/info",
+          "requiresAuth": true,
+          "description": "Get comprehensive server information including version, performance metrics, and player count.",
+          "responseExample": {
+            "version": "1.20.1",
+            "motd": "A Minecraft Server",
+            "seed": 123456789,
+            "difficulty": "normal",
+            "players": {
+              "online": 2,
+              "max": 20
+            },
+            "performance": {
+              "tps": 20.0,
+              "avgTickTime": 50.0
+            },
+            "memory": {
+              "used": 512,
+              "total": 2048
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Resources",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/resource/item/icon",
+          "requiresAuth": false,
+          "description": "Get item icon/texture as a PNG image.",
+          "queryParams": [
+            {
+              "name": "id",
+              "type": "string",
+              "required": true,
+              "description": "Item identifier (e.g., minecraft:diamond_sword)"
+            }
+          ],
+          "note": "Returns PNG image directly or 302 redirect to external asset URL for vanilla items."
+        }
+      ]
+    },
+    {
+      "name": "Event Stream",
+      "endpoints": [
+        {
+          "method": "GET",
+          "path": "/event/stream",
+          "requiresAuth": true,
+          "description": "Subscribe to real-time server events using Server-Sent Events (SSE).",
+          "eventTypes": [
+            {
+              "name": "player_join",
+              "description": "Player joined the server"
+            },
+            {
+              "name": "player_leave",
+              "description": "Player left the server"
+            },
+            {
+              "name": "player_chat",
+              "description": "Chat message sent"
+            },
+            {
+              "name": "player_advancement",
+              "description": "Player earned an advancement"
+            },
+            {
+              "name": "server_status",
+              "description": "Server performance update (every 10 minutes)"
+            }
+          ],
+          "eventExamples": [
+            {
+              "event": "player_join",
+              "data": "{\"name\":\"Player1\",\"uuid\":\"...\",\"online\":2}"
+            },
+            {
+              "event": "player_leave",
+              "data": "{\"name\":\"Player1\",\"uuid\":\"...\",\"online\":1}"
+            },
+            {
+              "event": "player_chat",
+              "data": "{\"sender\":\"Player1\",\"text\":\"Hello\"}"
+            },
+            {
+              "event": "player_advancement",
+              "data": "{\"name\":\"Player1\",\"uuid\":\"...\",\"title\":\"Stone Age\",\"description\":\"Mine stone\",\"type\":\"task\"}"
+            },
+            {
+              "event": "server_status",
+              "data": "{\"tps\":20.0,\"mspt\":50.0,\"usedMemory\":512,\"totalMemory\":2048,\"players\":2}"
+            }
+          ],
+          "tip": "Use the EventSource API in JavaScript to connect to this stream."
+        }
+      ]
+    }
+  ],
+  "statusCodes": [
+    { "code": "200", "description": "Success" },
+    { "code": "204", "description": "No content (OPTIONS requests)" },
+    { "code": "302", "description": "Redirect (resource fallback)" },
+    { "code": "400", "description": "Bad request (invalid parameters)" },
+    { "code": "401", "description": "Unauthorized (missing/invalid token)" },
+    { "code": "404", "description": "Not found (player/resource not found)" },
+    { "code": "405", "description": "Method not allowed" },
+    { "code": "500", "description": "Internal server error" }
+  ],
+  "configuration": {
+    "file": "config/sinfo.json",
+    "fields": [
+      {
+        "name": "apiPassword",
+        "type": "string",
+        "default": "admin",
+        "description": "Password for API authentication (use hash for Authorization header)"
+      },
+      {
+        "name": "apiPort",
+        "type": "integer",
+        "default": 8081,
+        "description": "Port for the API server"
+      },
+      {
+        "name": "downloadVanillaTextures",
+        "type": "boolean",
+        "default": true,
+        "description": "Whether to pre-download vanilla Minecraft textures"
+      }
+    ],
+    "note": "Configuration file is automatically created on first run in the server's config directory."
+  }
+}
+
