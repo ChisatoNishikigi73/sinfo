@@ -20,7 +20,6 @@ public class SInfoEventListener {
             }
 
             String data = JsonUtils.builder()
-                    .add("event", "player_join")
                     .add("name", handler.getPlayer().getName().getString())
                     .add("uuid", handler.getPlayer().getUuidAsString())
                     .add("online", onlineCount)
@@ -31,7 +30,6 @@ public class SInfoEventListener {
         // Player Leave
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
             String data = JsonUtils.builder()
-                    .add("event", "player_leave")
                     .add("name", handler.getPlayer().getName().getString())
                     .add("uuid", handler.getPlayer().getUuidAsString())
                     .add("online", server.getCurrentPlayerCount() - 1)
@@ -42,7 +40,6 @@ public class SInfoEventListener {
         // Chat Message
         ServerMessageEvents.CHAT_MESSAGE.register((message, sender, params) -> {
             String data = JsonUtils.builder()
-                    .add("event", "player_chat")
                     .add("sender", sender.getName().getString())
                     .add("text", message.getContent().getString())
                     .build();
@@ -67,7 +64,6 @@ public class SInfoEventListener {
         long usedMemory = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024;
 
         String data = JsonUtils.builder()
-                .add("event", "server_status")
                 .add("tps", tps)
                 .add("mspt", avgTickTime)
                 .add("usedMemory", usedMemory)

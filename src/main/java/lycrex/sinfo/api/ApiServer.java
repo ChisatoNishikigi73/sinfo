@@ -42,7 +42,7 @@ public class ApiServer {
             } catch (IOException e) {
                 SInfoMod.LOGGER.error("Failed to start API server", e);
             }
-        }, "SInfo-API-Thread").start();
+        }, "SInfo-Thread").start();
     }
 
     public void stop() {

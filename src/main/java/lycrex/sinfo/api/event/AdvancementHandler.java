@@ -21,7 +21,6 @@ public class AdvancementHandler {
                 String type = advancement.getDisplay().getFrame().name().toLowerCase();
 
                 String data = JsonUtils.builder()
-                        .add("event", "player_advancement")
                         .add("name", player.getName().getString())
                         .add("uuid", player.getUuidAsString())
                         .add("title", title)
