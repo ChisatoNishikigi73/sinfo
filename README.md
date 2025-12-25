@@ -1,6 +1,6 @@
 # SInfo
 
-SInfo is a server-side Fabric mod providing an HTTP API for Minecraft server management. It facilitates remote monitoring and control through a structured interface.
+SInfo provides APIs for interacting with Minecraft servers. This APIs allows you to manage players, worlds, send messages, execute commands, and monitor server status in real-time.
 
 ## Key Features
 
